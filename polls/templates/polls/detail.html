@@ -1,20 +1,35 @@
-<h1>{{ question.question_text }}</h1>
-<ul>
+{% load static %}
+<head>
+  <link rel="stylesheet" href={% static 'output.css' %}>
+</head>
+<h1 class="text-center text-gray-500 text-[40px]">Current Question: {{ question.question_text }}</h1>
+<ul
+  class="px-4 space-y-1 max-w-md list-decimal shadow-2xl shadow-purple-300 rounded-2xl list-inside text-gray-500 dark:text-gray-400 md:w-[60%] md:mx-auto outline outline-2 outline-purple-400 min-h-[300px]"
+>
+  <h1 class="text-center text-gray-500 text-[20px] py-4 pb-1">Results</h1>
+
   {% for choice in question.choice_set.all %}
   <li>{{ choice.choice_text }}-- {{choice.votes}} votes</li>
   {% endfor %}
 </ul>
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
+<form
+  class="px-4 space-y-1 max-w-md list-decimal shadow-2xl shadow-purple-300 rounded-2xl list-inside text-gray-500 dark:text-gray-400 md:w-[60%] md:mx-auto outline outline-2 outline-purple-400 min-h-[300px] mt-8"
+  action="{% url 'polls:vote' question.id %}"
+  method="post"
+>
   {% csrf_token %}
   <fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
+    <legend class="text-center"><h1 class="text-center text-gray-500 text-[20px] py-4 pb-1" >Vote Below</h1></legend>
     {% if error_message %}
-    <p><strong>{{ error_message }}</strong></p>
+    <p><strong class="text-red-600 shadow-2xl shadow-red-500 text-center text-xs">{{ error_message }}</strong></p>
     {% endif %} {% for choice in question.choice_set.all %}
     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
     {% endfor %}
   </fieldset>
-  <input type="submit" value="Vote" />
+  <div class="w-[20%] mx-auto">
+
+    <button class="outline outline-1 outline-cyan-500 rounded-full hover:bg-cyan-300 transition-all duration-500 px-4" type="submit">Vote</button>
+  </div>
 </form>
